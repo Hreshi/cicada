@@ -15,12 +15,16 @@ public class SecurityConfig {
 	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests(req->{
 			req
-			.antMatchers("/auth", "/error")
+			.antMatchers("/auth", "/logout")
 			.permitAll()
 			.anyRequest()
 			.authenticated();
 		})
-		.oauth2Login();
+		.oauth2Login(oauth -> {
+			oauth
+			.loginPage("/auth")
+			.defaultSuccessUrl("/");
+		});
 		return http.build();
 	}
 }
