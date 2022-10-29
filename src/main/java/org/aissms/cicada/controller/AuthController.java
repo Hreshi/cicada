@@ -11,7 +11,7 @@ public class AuthController {
     @GetMapping("/auth")
     public String getAuthPage(@AuthenticationPrincipal OAuth2User principal) {
         if(principal != null && principal.getAttribute("login") != null) {
-            return "redirect:home";
+            return "redirect:/";
         }
         return "auth";
     }
