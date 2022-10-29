@@ -1,7 +1,5 @@
 package org.aissms.cicada.messaging;
 
-import java.security.Principal;
-
 import org.aissms.cicada.entity.ClientMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
@@ -18,10 +16,9 @@ public class MessageController {
     @MessageMapping("/send")
     public void sendMessage(Message<ClientMessage> message, OAuth2AuthenticationToken user) {
         ClientMessage ms = message.getPayload();
-        template.convertAndSend("/messages/" + ms.getRecver(), ms);
-
-        System.out.println(ms.getContent());
-        System.out.println((String)user.getPrincipal().getAttribute("login"));
-        
+        String name = user.getPrincipal().getAttribute("login");
+        if(name != null && name.equalsIgnoreCase(ms.getSender())) {
+            template.convertAndSend("/messages/" + ms.getRecver(), ms);
+        }
     }
 }
