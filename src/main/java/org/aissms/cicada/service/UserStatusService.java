@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserStatusService {
-    static Map<String, String> map = Collections.synchronizedMap(new HashMap<String, String>());
+    private static Map<String, String> map = Collections.synchronizedMap(new HashMap<String, String>());
 
     public UserStatus getStatus(String name) {
         if(map.containsKey(name)) return new UserStatus(map.get(name));
