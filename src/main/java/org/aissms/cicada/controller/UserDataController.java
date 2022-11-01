@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserDataController {
     
     @GetMapping("/user/data")
-    public OAuth2User userDataController(@AuthenticationPrincipal OAuth2User user) {
-        return user;
+    public String userDataController(@AuthenticationPrincipal OAuth2User user) {
+        return user.getAttribute("login");
     }
 }

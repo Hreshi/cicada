@@ -7,6 +7,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
+import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 @Component
 public class WebSocketEventListener {
@@ -27,5 +28,11 @@ public class WebSocketEventListener {
         if(token == null) return;
         String name = token.getPrincipal().getAttribute("login");
         service.setStatus(name, "offline");
+    }
+
+    @EventListener
+    public void handleSessionSubscribeEvent(SessionSubscribeEvent event) {
+        // todo
+        // fix bug : client can subscribe to "messages/*"
     }
 }
