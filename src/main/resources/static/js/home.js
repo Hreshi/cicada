@@ -6,21 +6,21 @@ let messageInput = document.getElementById('message-input')
 let currentUser = "hreshi"
 let myself = "hreshi"
 
-let userList = ["hreshi", "Mspatild7", "Aakanksha", "Meera12kesh"]
+let userList = ["hreshi", "mspatild7", "makanksha2812", "meera12kesh"]
 let messageStore = []
 messageStore["hreshi"] = []
-messageStore["Mspatild7"] = []
-messageStore["Aakanksha"] = []
-messageStore["Meera12kesh"] = []
+messageStore["mspatild7"] = []
+messageStore["aakanksha2812"] = []
+messageStore["meera12kesh"] = []
 
 sendBtn.addEventListener('click', function (event) {
     event.preventDefault()
     let message = {
         sender:myself,
-        receiver:currentUser,
+        recver:currentUser,
         content:messageInput.value
     }
-    messageStore[currentUser].push(message)
+    messageStore[currentUser.toLocaleLowerCase()].push(message)
     appendMessage(message)
     sendMessage(message.content)
     messageInput.value = ""
@@ -62,8 +62,8 @@ function handleContactClickEvent(element) {
         messageList.removeChild(messageList.firstChild)
     }
     let sender = element.getAttribute("id")
-    console.log(messageStore[sender])
-    messageStore[sender].forEach(message => {
+    console.log(messageStore[sender.toLocaleLowerCase()])
+    messageStore[sender.toLocaleLowerCase()].forEach(message => {
         appendMessage(message)
     })
 }
@@ -80,9 +80,10 @@ function addUsersToContactList() {
 }
 
 function handleIncomingMessage(message) {
-    messageStore[message.sender].push(message);
-    if(message.sender == currentUser) {
+    messageStore[message.sender.toLocaleLowerCase()].push(message);
+    if(message.sender.toLowerCase() === currentUser.toLocaleLowerCase()) {
         appendMessage(message)
+        console.log("apple"+ message)
     }
 }
 
@@ -94,14 +95,14 @@ function connect() {
 
     stompClient.connect({}, function (frame) {
         console.log("connected!");
-        stompClient.subscribe("/messages/hreshi", function (data) {
+        stompClient.subscribe("/messages/"+myself, function (data) {
             console.log("Message Received : ");
             let msg = JSON.parse(data.body)
             console.log(msg)
             let message = {
-                sender:msg.sender,
-                receiver:msg.recver,
-                content:msg.connect
+                sender:msg.sender.toLocaleLowerCase(),
+                recver:msg.recver.toLocaleLowerCase(),
+                content:msg.content
             }
             handleIncomingMessage(message)
         })
@@ -119,20 +120,20 @@ function sendMessage(message) {
     stompClient.send("/ms/send", {}, JSON.stringify(data));
 }
 
-function setMyself() {
-    fetch("/user/data", {method:"get", credentials: 'include'})
-    .then(response => {
-        response
-    })
-    .then(text => {
-        console.log(text)
-        myself = text
-    })
-    .catch(err => {
-        console.log(err)
-    })
+async function setMyself() {
+    let res = await fetch("/user/data");
+    let name = await res.text();
+    myself = name.toLocaleLowerCase()
+    console.log(myself)
+    for(let i = 0;i < userList.length;i++) {
+        if(userList[i].toLowerCase() === myself.toLocaleLowerCase()) {
+            userList.splice(i,1)
+        }
+    }
+    currentUser = userList[0]
+    addUsersToContactList()
+    connect()
 }
 
 
-addUsersToContactList()
 setMyself()
