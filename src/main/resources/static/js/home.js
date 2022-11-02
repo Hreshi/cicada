@@ -6,7 +6,7 @@ let messageInput = document.getElementById('message-input')
 let currentUser = "hreshi"
 let myself = "hreshi"
 
-let userList = ["hreshi", "mspatild7", "makanksha2812", "meera12kesh"]
+let userList = ["hreshi", "mspatild7", "aakanksha2812", "meera12kesh"]
 let messageStore = []
 messageStore["hreshi"] = []
 messageStore["mspatild7"] = []
@@ -36,7 +36,11 @@ function makeMessage(message) {
     messageP.className = " ms-1"
     messageDiv.append(nameP)
     messageDiv.append(messageP)
-    messageDiv.className = "card text-wrap left-message mt-3 text-secondary "
+    if(message.sender === myself) {
+        messageDiv.className = "card text-wrap mt-3 bg-green text-secondary "    
+    } else {
+        messageDiv.className = "card text-wrap left-message bg-blue mt-3 text-secondary "
+    }
     return messageDiv
 }
 
