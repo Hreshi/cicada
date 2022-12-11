@@ -24,6 +24,16 @@ public class SecurityConfig {
 			oauth
 			.loginPage("/auth")
 			.defaultSuccessUrl("/");
+		})
+		.csrf(cs -> {
+			cs
+			.ignoringAntMatchers("/logout");
+		})
+		.logout(log -> {
+			log
+			.logoutUrl("/logout")
+			.invalidateHttpSession(true)
+			.logoutSuccessUrl("/auth");
 		});
 		return http.build();
 	}
