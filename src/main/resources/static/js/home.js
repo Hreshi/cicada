@@ -13,6 +13,11 @@ messageStore["mspatild7"] = []
 messageStore["aakanksha2812"] = []
 messageStore["meera12kesh"] = []
 
+async function fetchResponse() {
+    let res = await fetch("/user/data");
+    console.log(await res.text())
+}
+
 sendBtn.addEventListener('click', function (event) {
     event.preventDefault()
     let message = {
@@ -24,6 +29,7 @@ sendBtn.addEventListener('click', function (event) {
     appendMessage(message)
     sendMessage(message.content)
     messageInput.value = ""
+    fetchResponse()
 })
 
 function makeMessage(message) {
@@ -129,15 +135,18 @@ async function setMyself() {
     let name = await res.text();
     myself = name.toLocaleLowerCase()
     console.log(myself)
-    for(let i = 0;i < userList.length;i++) {
-        if(userList[i].toLowerCase() === myself.toLocaleLowerCase()) {
-            userList.splice(i,1)
-        }
-    }
+    // for(let i = 0;i < userList.length;i++) {
+    //     if(userList[i].toLowerCase() === myself.toLocaleLowerCase()) {
+    //         userList.splice(i,1)
+    //     }
+    // }
     currentUser = userList[0]
     addUsersToContactList()
     connect()
 }
 
+function logout() {
+    fetch("/logout")
+}
 
 setMyself()
