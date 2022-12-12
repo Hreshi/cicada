@@ -1,25 +1,26 @@
 package org.aissms.cicada.events;
 
-import org.aissms.cicada.service.UserStatusService;
+import org.aissms.cicada.repository.UserStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
-import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 @Component
 public class WebSocketEventListener {
     
-    @Autowired UserStatusService service;
+    @Autowired UserStatusRepository repository;
 
     @EventListener
     public void handleSessionConnectedEvent(SessionConnectedEvent event) {
         OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) event.getUser();
         if(token == null) return;
         String name = token.getPrincipal().getAttribute("login");
-        service.setStatus(name, "online");
+        if(name != null) {
+            repository.setOnline(name.toLowerCase());
+        }
     }
 
     @EventListener
@@ -27,12 +28,8 @@ public class WebSocketEventListener {
         OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) event.getUser();
         if(token == null) return;
         String name = token.getPrincipal().getAttribute("login");
-        service.setStatus(name, "offline");
-    }
-
-    @EventListener
-    public void handleSessionSubscribeEvent(SessionSubscribeEvent event) {
-        // todo
-        // fix bug : client can subscribe to "messages/*"
+        if(name != null) {
+            repository.setOffline(name.toLowerCase());
+        }
     }
 }
