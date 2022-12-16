@@ -132,8 +132,9 @@ function sendMessage(message) {
 
 async function setMyself() {
     let res = await fetch("/user/data");
-    let name = await res.text();
-    myself = name.toLocaleLowerCase()
+    let name = await JSON.parse(await res.text());
+
+    myself = name.username.toLocaleLowerCase()
     console.log(myself)
     // for(let i = 0;i < userList.length;i++) {
     //     if(userList[i].toLowerCase() === myself.toLocaleLowerCase()) {

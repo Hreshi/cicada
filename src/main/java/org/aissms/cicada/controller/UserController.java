@@ -1,5 +1,6 @@
 package org.aissms.cicada.controller;
 
+import org.aissms.cicada.entity.User;
 import org.aissms.cicada.entity.UserStatus;
 import org.aissms.cicada.repository.UserStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,8 @@ public class UserController {
     @Autowired UserStatusRepository repository;
 
     @GetMapping("/user/data")
-    public String userDataController(@AuthenticationPrincipal OAuth2User user) {
-        return user.getAttribute("login");
+    public User userDataController(@AuthenticationPrincipal OAuth2User oauth) {
+        return new User(oauth.getAttribute("login"), oauth.getAttribute("avatar_url"));
     }
     
     @GetMapping("/user/status/{username}")
