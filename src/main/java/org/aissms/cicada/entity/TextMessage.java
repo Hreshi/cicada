@@ -1,11 +1,11 @@
 package org.aissms.cicada.entity;
 
-public class ClientMessage {
+public class TextMessage {
     private String sender;
     private String recver;
     private String content;
 
-    public ClientMessage(String sender, String recver, String content) {
+    public TextMessage(String sender, String recver, String content) {
         this.sender = sender;
         this.recver = recver;
         this.content = content;
