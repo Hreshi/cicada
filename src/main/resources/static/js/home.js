@@ -17,6 +17,10 @@ async function fetchResponse() {
     let res = await fetch("/user/data");
     console.log(await res.text())
 }
+async function req(url) {
+    let res = await fetch(url);
+    console.log(await res.text());
+}
 
 sendBtn.addEventListener('click', function (event) {
     event.preventDefault()
