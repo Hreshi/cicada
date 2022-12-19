@@ -13,10 +13,7 @@ messageStore["mspatild7"] = []
 messageStore["aakanksha2812"] = []
 messageStore["meera12kesh"] = []
 
-async function fetchResponse() {
-    let res = await fetch("/user/data");
-    console.log(await res.text())
-}
+
 async function req(url) {
     let res = await fetch(url);
     console.log(await res.text());
@@ -33,7 +30,6 @@ sendBtn.addEventListener('click', function (event) {
     appendMessage(message)
     sendMessage(message.content)
     messageInput.value = ""
-    fetchResponse()
 })
 
 function makeMessage(message) {
@@ -70,13 +66,11 @@ function appendMessage(message) {
 }
 
 function handleContactClickEvent(element) {
-    console.log(element.getAttribute("id"))
     messageInput.value = ""
     while(messageList.firstChild) {
         messageList.removeChild(messageList.firstChild)
     }
     let sender = element.getAttribute("id")
-    console.log(messageStore[sender.toLocaleLowerCase()])
     messageStore[sender.toLocaleLowerCase()].forEach(message => {
         appendMessage(message)
     })
@@ -108,11 +102,9 @@ function connect() {
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function (frame) {
-        console.log("connected!");
         stompClient.subscribe("/messages/"+myself, function (data) {
             console.log("Message Received : ");
             let msg = JSON.parse(data.body)
-            console.log(msg)
             let message = {
                 sender:msg.sender.toLocaleLowerCase(),
                 recver:msg.recver.toLocaleLowerCase(),
@@ -130,7 +122,6 @@ function sendMessage(message) {
         content:message
     };
 
-    console.log("Sending Message");
     stompClient.send("/ms/send", {}, JSON.stringify(data));
 }
 
@@ -139,19 +130,18 @@ async function setMyself() {
     let name = await JSON.parse(await res.text());
 
     myself = name.username.toLocaleLowerCase()
-    console.log(myself)
-    // for(let i = 0;i < userList.length;i++) {
-    //     if(userList[i].toLowerCase() === myself.toLocaleLowerCase()) {
-    //         userList.splice(i,1)
-    //     }
-    // }
+    for(let i = 0;i < userList.length;i++) {
+        if(userList[i].toLowerCase() === myself.toLocaleLowerCase()) {
+            userList.splice(i,1)
+        }
+    }
     currentUser = userList[0]
     addUsersToContactList()
     connect()
 }
 
 function logout() {
-    fetch("/logout")
+    fetch("/logout", {method:"POST"})
 }
 
 setMyself()
