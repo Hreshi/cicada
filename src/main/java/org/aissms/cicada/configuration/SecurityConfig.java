@@ -31,7 +31,7 @@ public class SecurityConfig {
 		})
 		.csrf(cs -> {
 			cs
-			.ignoringAntMatchers("/logout");
+			.disable();
 		})
 		.logout(log -> {
 			log
