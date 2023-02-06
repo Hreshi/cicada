@@ -21,7 +21,7 @@ public class SecurityConfig {
 	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests(req->{
 			req
-			.antMatchers("/register", "/login", "/logout")
+			.antMatchers("/register", "/login", "/page", "/js/*","/css/*")
 			.permitAll()
 			.anyRequest()
 			.authenticated();
