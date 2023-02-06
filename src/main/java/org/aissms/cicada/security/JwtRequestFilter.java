@@ -22,26 +22,22 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = extractJwtToken(request);
+        String token = request.getParameter("token");
+        if(token == null) {
+            token = extractJwtToken(request);
+        }
         if(token != null) {
             try {
                 String email = jwtTokenUtil.getUsernameFromToken(token);
                 System.out.println(email+"\n\n");
                 if(email != null || !jwtTokenUtil.isTokenExpired(token)) {
-                    System.out.println("Before");
-                    
-                    // authorities must be passed, can be null
-                    Authentication auth = new UsernamePasswordAuthenticationToken(email, email, null);
-                    SecurityContext context = SecurityContextHolder.createEmptyContext();
-                    context.setAuthentication(auth);
-                    SecurityContextHolder.setContext(context);
-                    System.out.println("After");
+                    setAuthenticated(email);
                 }
             } catch (Exception e) {
                 System.out.println("token not found");
             }
         }
-        // go to upcoming filters
+        // go to next filters
         filterChain.doFilter(request, response);
     }
     private String extractJwtToken(HttpServletRequest request) {
@@ -50,5 +46,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return value.substring(7);
         }
         return null;
+    }
+    private void setAuthenticated(String email) {
+        // authorities must be passed, can be null
+        Authentication auth = new UsernamePasswordAuthenticationToken(email, email, null);
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(auth);
+        SecurityContextHolder.setContext(context);
     }
 }
