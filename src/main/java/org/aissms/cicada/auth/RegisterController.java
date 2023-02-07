@@ -20,9 +20,10 @@ public class RegisterController {
         System.out.println("Begin register");
         User user = repository.findByEmail(form.getEmail());
         if(user != null) {
-            return "fuck";
+            return "email already exists!";
         }
         user = mapToUser(form);
+        user.setPassword(encoder.encode(user.getPassword()));
         repository.save(user);
         String token = jwtTokenUtil.generateToken(getUserDetails(form.getEmail(), form.getPassword()));
         System.out.println("Generate token : " + token);
