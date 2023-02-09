@@ -4,6 +4,8 @@ import org.aissms.cicada.security.JwtTokenUtil;
 import org.aissms.cicada.user.User;
 import org.aissms.cicada.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,18 +18,18 @@ public class RegisterController {
     @Autowired JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/register")
-    public String registerUser(RegisterForm form) {
+    public ResponseEntity<String> registerUser(RegisterForm form) {
         System.out.println("Begin register");
         User user = repository.findByEmail(form.getEmail());
         if(user != null) {
-            return "email already exists!";
+            return new ResponseEntity<String>("email already exists", HttpStatus.FORBIDDEN);
         }
         user = mapToUser(form);
         user.setPassword(encoder.encode(user.getPassword()));
         repository.save(user);
         String token = jwtTokenUtil.generateToken(getUserDetails(form.getEmail(), form.getPassword()));
         System.out.println("Generate token : " + token);
-        return token;
+        return new ResponseEntity<String>(token, HttpStatus.OK);
     }
     
     private User mapToUser(RegisterForm form) {
