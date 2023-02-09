@@ -1,19 +1,32 @@
 package org.aissms.cicada.user;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 // ignore password while reading
-@Entity
+@Document("user")
 public class User {
-    @Id
+    @JsonIgnore
+    private String id;
     private String email;
     private String name;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String avatarUrl;
+    
+    @JsonIgnore
+    private Set<String> inviteFrom;
+
+    @JsonIgnore
+    private Set<String> inviteTo;
+
+    @JsonIgnore
+    private Set<String> conversation;
     
     public User() {
     }
@@ -40,5 +53,32 @@ public class User {
     }
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+    public Set<String> getInviteFrom() {
+        if(inviteFrom == null) this.inviteFrom = new HashSet<String>();
+        return inviteFrom;
+    }
+    public void setInviteFrom(Set<String> inviteFrom) {
+        this.inviteFrom = inviteFrom == null ? new HashSet<String>() : inviteFrom;
+    }
+    public Set<String> getInviteTo() {
+        if(inviteTo == null) this.inviteTo = new HashSet<String>();
+        return inviteTo;
+    }
+    public void setInviteTo(Set<String> inviteTo) {
+        this.inviteTo = inviteTo == null ? new HashSet<String>() : inviteTo;
+    }
+    public Set<String> getConversation() {
+        if(conversation == null) this.conversation = new HashSet<String>();
+        return conversation;
+    }
+    public void setConversation(Set<String> conversation) {
+        this.conversation = conversation == null ? new HashSet<String>() : conversation;
     }
 }

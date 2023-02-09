@@ -12,12 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     @Autowired UserRepository repository;
     
-    @GetMapping("/{email}")
+    @GetMapping("/info/{email}")
     public User getUserByEmail(@PathVariable String email) {
         return repository.findByEmail(email);
-    }
-    @GetMapping("/")
-    public String getNull(Authentication auth) {
-        return auth.getName();
     }
 }
