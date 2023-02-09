@@ -10,4 +10,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface ConversationRepository extends MongoRepository<Conversation, String>{
     Optional<Conversation> findById(String id);
     List<Conversation> findByIdIn(List<String> id);
+    Conversation findConversationByUser1AndUser2(String user1, String user2);
 }
