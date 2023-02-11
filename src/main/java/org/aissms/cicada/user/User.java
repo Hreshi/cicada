@@ -1,6 +1,8 @@
 package org.aissms.cicada.user;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -25,8 +27,9 @@ public class User {
     @JsonIgnore
     private Set<String> inviteTo;
 
+    // key is user id and value is conversation id
     @JsonIgnore
-    private Set<String> conversation;
+    private Map<String, String> conversation;
     
     public User() {
     }
@@ -74,11 +77,11 @@ public class User {
     public void setInviteTo(Set<String> inviteTo) {
         this.inviteTo = inviteTo == null ? new HashSet<String>() : inviteTo;
     }
-    public Set<String> getConversation() {
-        if(conversation == null) this.conversation = new HashSet<String>();
+    public Map<String,String> getConversation() {
+        if(conversation == null) this.conversation = new HashMap<String, String>();
         return conversation;
     }
-    public void setConversation(Set<String> conversation) {
-        this.conversation = conversation == null ? new HashSet<String>() : conversation;
+    public void setConversation(HashMap<String, String> conversation) {
+        this.conversation = conversation == null ? new HashMap<String, String>() : conversation;
     }
 }

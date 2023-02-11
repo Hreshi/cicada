@@ -2,7 +2,6 @@ package org.aissms.cicada.conversation;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.aissms.cicada.user.User;
 import org.aissms.cicada.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +15,8 @@ public class ConversationService {
     @Autowired UserRepository userRepository;
     
     public List<User> getAllConversations(Authentication auth) {
-        User user = userRepository.findByEmail(auth.getName());
-        List<Conversation> conversations = conversationRepository.findByIdIn(new ArrayList<String>(user.getConversation()));
-        List<String> friendIdList = new ArrayList<String>();
-        for(Conversation conv : conversations) {
-            if(user.getId().equals(conv.getUser1())) {
-                friendIdList.add(conv.getUser2());
-            } else {
-                friendIdList.add(conv.getUser1());
-            }
-        }
-        return userRepository.findByIdIn(friendIdList);
+        User user = userRepository.findByEmail(auth.getName());        
+        return userRepository.findByIdIn(new ArrayList<String>(user.getConversation().keySet()));
     }
     public void createNewConversation(User user1, User user2) {
         Conversation conv = new Conversation();
@@ -34,8 +24,8 @@ public class ConversationService {
         conv.setUser2(user2.getId());
         conv.setMessageBlockId(new ArrayList<>());
         conversationRepository.save(conv);
-        user1.getConversation().add(conv.getId());
-        user2.getConversation().add(conv.getId());
+        user1.getConversation().put(user2.getId(), conv.getId());
+        user2.getConversation().put(user1.getId(), conv.getId());
 
         // remove id from invitefrom and inviteto
         user1.getInviteFrom().remove(user2.getId());
