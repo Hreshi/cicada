@@ -60,3 +60,21 @@ Send message:
                 content:msg.content
             }
     Note * - the spelling is "recver" without i
+
+
+
+hrushi - eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJocnVzaGlAZ21haWwuY29tIiwiaWF0IjoxNjc2MTc3ODIwLCJleHAiOjE2NzYxOTU4MjB9.jJ-QGeEq1LImXf4Z3VAqU71P0RnNxs0LevWE0L_paKudn68Y6H-meRh9vhmpprayt6QqmsQECSul0DmVU402Ig
+ashu   - eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QGdtYWlsLmNvbSIsImlhdCI6MTY3NjE3Nzg3MywiZXhwIjoxNjc2MTk1ODczfQ.QM9l2WeFaWxYFxivRzp7n1bRnFx47evHeVFogwt-a5oGn8yTJruXziNRhLssT046TP7kBw7J6NhDUslOjXRlQQ
+
+
+test websocket
+
+1) connect with sockjs
+let sock = new SockJS('/ws?token=add_token_here')
+
+2) use stomp
+let stmp = StompJs.Stomp.over(sock);
+
+3) stmp.activate()
+
+4) stmp.send('/ms/data/user@gmail.com',{},'hello there')

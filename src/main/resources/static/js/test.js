@@ -1,3 +1,6 @@
+let sock = null;
+let stmp = null;
+let path = ''
 let authHeader = ''
 async function get(url, meth) {
 
@@ -12,4 +15,11 @@ async function get(url, meth) {
 
 function setToken(st) {
     authHeader = 'Bearer ' + st;
+    path = '/ws?token=' + st
+}
+
+function connect() {
+    sock = new SockJS(path);
+    stmp = StompJs.Stomp.over(sock);
+    stmp.activate();
 }

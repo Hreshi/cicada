@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 
 // test controller to check working
 @Controller
-public class MessageController {
+public class MessageControllerTest {
     
     @MessageMapping("/data")
     public void printData(Message<String> message, Authentication auth) {
