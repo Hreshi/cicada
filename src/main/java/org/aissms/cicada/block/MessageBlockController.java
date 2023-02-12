@@ -19,18 +19,8 @@ public class MessageBlockController {
     @Autowired
     MessageBlockRepository repository;
 
-    private String email;
-    
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     @GetMapping("/block-count")
-    public ResponseEntity<Integer> getBlockCount(Authentication auth) {
+    public ResponseEntity<Integer> getBlockCount(Authentication auth, @PathVariable("email") String email) {
         Conversation conv = service.getConversationWith(auth, email);
         if(conv == null) {
             return new ResponseEntity<Integer>(-1, HttpStatus.BAD_REQUEST);
@@ -40,9 +30,9 @@ public class MessageBlockController {
     }
 
     @GetMapping("/block/{index}")
-    public ResponseEntity<MessageBlock> getMessageBlock(Authentication auth, @PathVariable Integer index) {
+    public ResponseEntity<MessageBlock> getMessageBlock(Authentication auth, @PathVariable Integer index, @PathVariable("email") String email) {
         Conversation conv = service.getConversationWith(auth, email);
-        if(conv == null || index > conv.size()) {
+        if(conv == null || index > conv.size() || index < 0) {
             return new ResponseEntity<MessageBlock>(HttpStatus.BAD_REQUEST);
         }
         String blockId = conv.getMessageBlockId().get(index-1);
