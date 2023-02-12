@@ -54,7 +54,7 @@ public class MessageBlock {
     public static MessageBlock nextBlock(MessageBlock block) {
         MessageBlock block2 = new MessageBlock();
         block2.setIndex(block.getIndex()+1);
-        block2.setMessageList(new ArrayList<>());
+        block2.setMessageList(new ArrayList<MyMessage>());
         return block2;
     }
 }
