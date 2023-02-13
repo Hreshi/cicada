@@ -22,7 +22,7 @@ public class MessageController {
     @MessageMapping("/send/{email}")
     public void sendMessage(@Payload String message, @DestinationVariable("email") String email, Authentication auth) {
         
-        Conversation conv = conversationService.getConversationWith(auth, email);
+        Conversation conv = conversationService.getConversationWith(auth.getName(), email);
 
         // drop message as there is no conversation
         if(conv == null) return;

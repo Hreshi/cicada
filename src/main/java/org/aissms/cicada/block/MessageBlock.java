@@ -37,6 +37,7 @@ public class MessageBlock {
     public boolean isFull() {
         return messageList.size() >= BLOCK_SIZE;
     }
+    // first block in conversation
     public static MessageBlock genesisBlock() {
         MessageBlock block = new MessageBlock();
         block.index = 1;
@@ -51,6 +52,7 @@ public class MessageBlock {
         msg.setContent(message);
         messageList.add(msg);
     }
+    // create next block with index+1
     public static MessageBlock nextBlock(MessageBlock block) {
         MessageBlock block2 = new MessageBlock();
         block2.setIndex(block.getIndex()+1);

@@ -24,8 +24,7 @@ public class ConversationService {
     }
     public void createNewConversation(User user1, User user2) {
         Conversation conv = new Conversation();
-        conv.setUser1(user1.getId());
-        conv.setUser2(user2.getId());
+
         conv.setMessageBlockId(new ArrayList<>());
         MessageBlock block = MessageBlock.genesisBlock();
         blockRepository.save(block);
@@ -43,16 +42,14 @@ public class ConversationService {
         userRepository.save(user1);
         userRepository.save(user2);
     }
-    public Conversation getConversationWith(Authentication auth, String email) {
-        User myself = userRepository.findByEmail(auth.getName());
-        User friend = userRepository.findByEmail(email);
-        System.out.println("Before");
+    public Conversation getConversationWith(String email1, String email2) {
+        User myself = userRepository.findByEmail(email1);
+        User friend = userRepository.findByEmail(email2);
         if(friend == null) return null;
-        System.out.println("friend not null");
 
         String convId = myself.getConversation().get(friend.getId());
         if(convId == null) return null;
-        System.out.println("convid not null");
+
         return conversationRepository.findById(convId).get();
     }
 }
