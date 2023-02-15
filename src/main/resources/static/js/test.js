@@ -23,3 +23,7 @@ function connect() {
     stmp = StompJs.Stomp.over(sock);
     stmp.activate();
 }
+
+function send(user, message) {
+    stmp.send('/ms/send/'+user,{}, message)
+}

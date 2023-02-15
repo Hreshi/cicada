@@ -2,22 +2,12 @@ package org.aissms.cicada.messaging;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class MyMessage {
-    private int blockIndex;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private int index;
+    private String authorId;
     private String content;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Date time;
     
-    public int getIndex() {
-        return index;
-    }
-    public void setIndex(int index) {
-        this.index = index;
-    }
+    
     public String getContent() {
         return content;
     }
@@ -33,10 +23,21 @@ public class MyMessage {
     public void setTime() {
         this.time = new Date();
     }
-    public int getBlockIndex() {
-        return blockIndex;
+    public String getAuthorId() {
+        return authorId;
     }
-    public void setBlockIndex(int blockIndex) {
-        this.blockIndex = blockIndex;
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
+
+    // dto mapping
+    public MyMessageDto map(int blockIndex, int messageIndex, String author) {
+        MyMessageDto dto = new MyMessageDto();
+        dto.setBlockIndex(blockIndex);
+        dto.setMessageIndex(messageIndex);
+        dto.setAuthor(author);
+        dto.setContent(author);
+        dto.setDate(time);
+        return dto;
     }
 }
