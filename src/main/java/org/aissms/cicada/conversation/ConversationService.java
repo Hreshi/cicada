@@ -6,6 +6,7 @@ import java.util.List;
 import org.aissms.cicada.block.MessageBlock;
 import org.aissms.cicada.block.MessageBlockRepository;
 import org.aissms.cicada.user.User;
+import org.aissms.cicada.user.UserDto;
 import org.aissms.cicada.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,15 +19,16 @@ public class ConversationService {
     @Autowired UserRepository userRepository;
     @Autowired MessageBlockRepository blockRepository;
     
-    public List<User> getAllConversations(Authentication auth) {
+    public List<UserDto> getAllConversations(Authentication auth) {
         User user = userRepository.findByEmail(auth.getName());        
-        return userRepository.findByIdIn(new ArrayList<String>(user.getConversation().keySet()));
+        List<User> userList = userRepository.findByIdIn(new ArrayList<String>(user.getConversation().keySet()));
+        return User.mapToUserDto(userList);
     }
     public void createNewConversation(User user1, User user2) {
         Conversation conv = new Conversation();
 
         conv.setMessageBlockId(new ArrayList<>());
-        MessageBlock block = MessageBlock.genesisBlock();
+        MessageBlock block = MessageBlock.block();
         blockRepository.save(block);
         conv.addBlock(block);
         conversationRepository.save(conv);
@@ -34,10 +36,10 @@ public class ConversationService {
         user2.getConversation().put(user1.getId(), conv.getId());
 
         // remove id from invitefrom and inviteto
-        user1.getInviteFrom().remove(user2.getId());
-        user1.getInviteTo().remove(user2.getId());
-        user2.getInviteFrom().remove(user1.getId());
-        user2.getInviteTo().remove(user1.getId());
+        user1.getInviteReceived().remove(user2.getId());
+        user1.getInviteSent().remove(user2.getId());
+        user2.getInviteReceived().remove(user1.getId());
+        user2.getInviteSent().remove(user1.getId());
 
         userRepository.save(user1);
         userRepository.save(user2);

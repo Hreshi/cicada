@@ -2,7 +2,7 @@ package org.aissms.cicada.conversation;
 
 import java.util.List;
 
-import org.aissms.cicada.user.User;
+import org.aissms.cicada.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ public class ConversationController {
     @Autowired ConversationService service;
 
     @GetMapping("/my-conversation")
-    public List<User> getAllConversation(Authentication auth) {
+    public List<UserDto> getAllConversation(Authentication auth) {
         return service.getAllConversations(auth);
     }
     
