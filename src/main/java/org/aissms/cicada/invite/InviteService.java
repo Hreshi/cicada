@@ -6,24 +6,29 @@ import java.util.List;
 
 import org.aissms.cicada.conversation.ConversationService;
 import org.aissms.cicada.user.User;
+import org.aissms.cicada.user.UserDto;
 import org.aissms.cicada.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
 
+@Service
 public class InviteService {
     @Autowired UserRepository repository;
     @Autowired ConversationService conversationService;
 
-    public List<User> getSentInvites(String email) {
+    public List<UserDto> getSentInvites(String email) {
         User user = repository.findByEmail(email);
-        if(user.getInviteTo() == null) return Collections.emptyList();
-        return repository.findByIdIn(new ArrayList<String>(user.getInviteTo()));
+        if(user.getInviteSent() == null) return Collections.emptyList();
+        List<User> userList = repository.findByIdIn(new ArrayList<String>(user.getInviteSent()));
+        return User.mapToUserDto(userList);
     }
 
-    public List<User> getReceivedInvites(String email) {
+    public List<UserDto> getReceivedInvites(String email) {
         User user = repository.findByEmail(email);
-        if(user.getInviteFrom() == null) return Collections.emptyList();
-        return repository.findByIdIn(new ArrayList<String>(user.getInviteFrom()));
+        if(user.getInviteReceived() == null) return Collections.emptyList();
+        List<User> userList = repository.findByIdIn(new ArrayList<String>(user.getInviteReceived()));
+        return User.mapToUserDto(userList);
     }
 
     public boolean sendInvite(String email1, String email2) {
@@ -32,8 +37,8 @@ public class InviteService {
             return false;
         }
         User myself = repository.findByEmail(email1);
-        myself.getInviteTo().add(thatUser.getId());
-        thatUser.getInviteFrom().add(myself.getId());
+        myself.getInviteSent().add(thatUser.getId());
+        thatUser.getInviteReceived().add(myself.getId());
         repository.save(myself);
         repository.save(thatUser);
         return true;
@@ -44,21 +49,21 @@ public class InviteService {
             return false;
         }
         User myself = repository.findByEmail(auth.getName());
-        myself.getInviteFrom().remove(thatUser.getId());
-        myself.getInviteTo().remove(thatUser.getId());
+        myself.getInviteReceived().remove(thatUser.getId());
+        myself.getInviteSent().remove(thatUser.getId());
         repository.save(myself);
         return true;
     }
-    public User acceptInvite(Authentication auth, String email) {
+    public UserDto acceptInvite(Authentication auth, String email) {
         User thatUser = repository.findByEmail(email);
         if(thatUser == null) {
             return null;
         }
         User myself = repository.findByEmail(auth.getName());
-        if(!myself.getInviteFrom().contains(thatUser.getId())) {
+        if(!myself.getInviteReceived().contains(thatUser.getId())) {
             return null;
         }
         conversationService.createNewConversation(thatUser, myself);
-        return thatUser;
+        return thatUser.mapToUserDto();
     }
 }

@@ -2,7 +2,7 @@ package org.aissms.cicada.invite;
 
 import java.util.List;
 
-import org.aissms.cicada.user.User;
+import org.aissms.cicada.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +22,11 @@ public class InviteController {
     @Autowired InviteService service;
 
     @GetMapping("/sent")
-    public List<User> getSentInvites(Authentication auth) {
+    public List<UserDto> getSentInvites(Authentication auth) {
         return service.getSentInvites(auth.getName());
     }
     @GetMapping("/received")
-    public List<User> getReceivedInvites(Authentication auth) {
+    public List<UserDto> getReceivedInvites(Authentication auth) {
         return service.getReceivedInvites(auth.getName());
     }
     @PostMapping("/send/{email}")
@@ -45,11 +45,11 @@ public class InviteController {
         return new ResponseEntity<String>("success", HttpStatus.OK);
     }
     @PostMapping("/accept/{email}")
-    public ResponseEntity<User> acceptInvite(Authentication auth, @PathVariable String email) {
-        User user = service.acceptInvite(auth, email);
+    public ResponseEntity<UserDto> acceptInvite(Authentication auth, @PathVariable String email) {
+        UserDto user = service.acceptInvite(auth, email);
         if(user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<User>(user, HttpStatus.OK);
+        return new ResponseEntity<UserDto>(user, HttpStatus.OK);
     }
 }
