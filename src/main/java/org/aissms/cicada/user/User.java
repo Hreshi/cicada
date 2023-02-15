@@ -1,37 +1,32 @@
 package org.aissms.cicada.user;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-// ignore password while reading
-@Document("user")
+// user
 public class User {
-    @JsonIgnore
+    @Id
     private String id;
     private String email;
     private String name;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String avatarUrl;
     
-    @JsonIgnore
-    private Set<String> inviteFrom;
+    private Set<String> inviteReceived;
 
-    @JsonIgnore
-    private Set<String> inviteTo;
+    private Set<String> inviteSent;
 
     // key is user id and value is conversation id
-    @JsonIgnore
     private Map<String, String> conversation;
     
     public User() {
+
     }
     public String getName() {
         return name;
@@ -63,19 +58,19 @@ public class User {
     public void setId(String id) {
         this.id = id;
     }
-    public Set<String> getInviteFrom() {
-        if(inviteFrom == null) this.inviteFrom = new HashSet<String>();
-        return inviteFrom;
+    public Set<String> getInviteReceived() {
+        if(inviteReceived == null) this.inviteReceived = new HashSet<String>();
+        return inviteReceived;
     }
-    public void setInviteFrom(Set<String> inviteFrom) {
-        this.inviteFrom = inviteFrom == null ? new HashSet<String>() : inviteFrom;
+    public void setInviteReceived(Set<String> inviteFrom) {
+        this.inviteReceived = inviteFrom == null ? new HashSet<String>() : inviteFrom;
     }
-    public Set<String> getInviteTo() {
-        if(inviteTo == null) this.inviteTo = new HashSet<String>();
-        return inviteTo;
+    public Set<String> getInviteSent() {
+        if(inviteSent == null) this.inviteSent = new HashSet<String>();
+        return inviteSent;
     }
-    public void setInviteTo(Set<String> inviteTo) {
-        this.inviteTo = inviteTo == null ? new HashSet<String>() : inviteTo;
+    public void setInviteSent(Set<String> inviteTo) {
+        this.inviteSent = inviteTo == null ? new HashSet<String>() : inviteTo;
     }
     public Map<String,String> getConversation() {
         if(conversation == null) this.conversation = new HashMap<String, String>();
@@ -83,5 +78,21 @@ public class User {
     }
     public void setConversation(HashMap<String, String> conversation) {
         this.conversation = conversation == null ? new HashMap<String, String>() : conversation;
+    }
+
+    // dto mapping
+    public UserDto mapToUserDto() {
+        UserDto dto = new UserDto();
+        dto.email = this.email;
+        dto.name = this.name;
+        dto.avatarUrl = this.avatarUrl;
+        return dto;
+    }
+    public static List<UserDto> mapToUserDto(List<User> userList) {
+        List<UserDto> dtoList = new ArrayList<UserDto>();
+        for(User user : userList) {
+            dtoList.add(user.mapToUserDto());
+        }
+        return dtoList;
     }
 }
