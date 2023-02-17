@@ -5,8 +5,8 @@ import java.util.List;
 import org.aissms.cicada.messaging.MyMessageDto;
 
 public class MessageBlockDto {
-    int blockIndex;
-    List<MyMessageDto> messageList;
+    public int blockIndex;
+    public List<MyMessageDto> messageList;
 
     public MessageBlockDto() {
         
