@@ -8,6 +8,8 @@ public class UserService {
     @Autowired UserRepository userRepository;
 
     public UserDto getUserByEmail(String email) {
-        return userRepository.findByEmail(email).mapToUserDto();
+        User user = userRepository.findByEmail(email);
+        if(user == null) return null;
+        return user.mapToUserDto();
     }
 }
