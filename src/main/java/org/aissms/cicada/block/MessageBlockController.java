@@ -26,7 +26,7 @@ public class MessageBlockController {
     // blocks are 1 indexed
     @GetMapping("/block/{index}")
     public ResponseEntity<MessageBlockDto> getMessageBlock(Authentication auth, @PathVariable Integer index, @PathVariable("email") String email) {
-        MessageBlockDto block = service.getMessageBlockDto(auth.getName(), email, 0);
+        MessageBlockDto block = service.getMessageBlockDto(auth.getName(), email, index);
         if(block == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
