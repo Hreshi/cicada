@@ -2,6 +2,7 @@ let sock = null;
 let stmp = null;
 let path = ''
 let authHeader = ''
+let myEmail = ''
 async function get(url, meth) {
 
     let res = await fetch(url, {
@@ -12,7 +13,9 @@ async function get(url, meth) {
     });
     console.log(await res.text());
 }
-
+function setEmail(email) {
+    myEmail = email
+}
 function setToken(st) {
     authHeader = 'Bearer ' + st;
     path = '/ws?token=' + st
@@ -26,4 +29,14 @@ function connect() {
 
 function send(user, message) {
     stmp.send('/ms/send/'+user,{}, message)
+}
+
+function subscribe() {
+    stmp.subscribe('/messages/'+myEmail, function (message) {
+        if(message.body) {
+            console.log(message.body);
+        } else {
+            console.log(message)
+        }
+    })
 }

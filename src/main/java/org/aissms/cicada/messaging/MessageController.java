@@ -22,7 +22,9 @@ public class MessageController {
             return;
         }
 
-        // add ws notification code here
+        // notify user
+        messageService.notifyUser(email, dto);
+
     }
     @GetMapping("/home")
     public String homePage() {

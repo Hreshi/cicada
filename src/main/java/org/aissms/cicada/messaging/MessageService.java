@@ -9,6 +9,7 @@ import org.aissms.cicada.conversation.ConversationRepository;
 import org.aissms.cicada.user.User;
 import org.aissms.cicada.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +17,7 @@ public class MessageService {
     @Autowired UserRepository userRepository;
     @Autowired ConversationRepository conversationRepository;
     @Autowired MessageBlockRepository blockRepository;
+    @Autowired SimpMessagingTemplate messagingTemplate;
 
     public MyMessageDto storeMessage(String senderEmail, String receiverEmail, String content) {
         User receiver = userRepository.findByEmail(receiverEmail);
@@ -55,5 +57,9 @@ public class MessageService {
         dto.setMessageIndex(messageIndex);
 
         return dto;
+    }
+
+    public void notifyUser(String email, MyMessageDto messageDto) {
+        messagingTemplate.convertAndSend("/messages/"+email, messageDto);
     }
 }
