@@ -26,10 +26,11 @@ public class MessageController {
         messageService.notifyUser(email, dto);
 
     }
-    @MessageMapping("/tunnel/{email}")
-    public void sendMessageInTunnel(@Payload String message, @DestinationVariable("email") String email, Authentication auth) {
-        messageService.notifyUser(email, message);
-    }
+    // bug : can send message to any user on platform
+    // @MessageMapping("/tunnel/{email}")
+    // public void sendMessageInTunnel(@Payload String message, @DestinationVariable("email") String email, Authentication auth) {
+    //     messageService.notifyUser(email, message);
+    // }
     @GetMapping("/home")
     public String homePage() {
         return "home";
