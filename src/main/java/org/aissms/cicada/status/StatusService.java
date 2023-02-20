@@ -21,6 +21,9 @@ public class StatusService {
     public void setStatus(String email) {
         statusRepository.put(email);
     }
+    public void removeStatus(String email) {
+        statusRepository.remove(email);
+    }
     private boolean friends(User user1, User user2) {
         return user1.getConversation().containsKey(user2.getId());
     }
