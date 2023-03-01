@@ -18,7 +18,7 @@ function setEmail(email) {
 }
 function setToken(st) {
     authHeader = 'Bearer ' + st;
-    path = '/ws?token=' + st
+    path = '/api/ws?token=' + st
 }
 
 function connect() {

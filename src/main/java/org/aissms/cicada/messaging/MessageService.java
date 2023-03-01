@@ -63,6 +63,6 @@ public class MessageService {
         messagingTemplate.convertAndSend("/messages/"+email, messageDto);
     }
     public void notifyUser(String email, String message) {
-        messagingTemplate.convertAndSend("/messages"+email, message);
+        messagingTemplate.convertAndSend("/messages/"+email, message);
     }
 }
