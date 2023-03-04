@@ -7,7 +7,7 @@ import org.aissms.cicada.block.MessageBlock;
 import org.aissms.cicada.block.MessageBlockRepository;
 import org.aissms.cicada.user.User;
 import org.aissms.cicada.user.UserDto;
-import org.aissms.cicada.user.UserRepository;
+import org.aissms.cicada.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -16,12 +16,12 @@ import org.springframework.stereotype.Service;
 public class ConversationService {
     
     @Autowired ConversationRepository conversationRepository;
-    @Autowired UserRepository userRepository;
+    @Autowired UserService userService;
     @Autowired MessageBlockRepository blockRepository;
     
     public List<UserDto> getAllConversations(Authentication auth) {
-        User user = userRepository.findByEmail(auth.getName());        
-        List<User> userList = userRepository.findByIdIn(new ArrayList<String>(user.getConversation().keySet()));
+        User user = userService.findByEmail(auth.getName());        
+        List<User> userList = userService.findByIdIn(new ArrayList<String>(user.getConversation().keySet()));
         return User.mapToUserDto(userList);
     }
     public void createNewConversation(User user1, User user2) {
@@ -41,12 +41,12 @@ public class ConversationService {
         user2.getInviteReceived().remove(user1.getId());
         user2.getInviteSent().remove(user1.getId());
 
-        userRepository.save(user1);
-        userRepository.save(user2);
+        userService.save(user1);
+        userService.save(user2);
     }
     public Conversation getConversationWith(String email1, String email2) {
-        User myself = userRepository.findByEmail(email1);
-        User friend = userRepository.findByEmail(email2);
+        User myself = userService.findByEmail(email1);
+        User friend = userService.findByEmail(email2);
         if(friend == null) return null;
 
         String convId = myself.getConversation().get(friend.getId());

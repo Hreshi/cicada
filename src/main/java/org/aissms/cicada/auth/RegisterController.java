@@ -5,7 +5,7 @@ import java.util.HashSet;
 
 import org.aissms.cicada.security.JwtTokenUtil;
 import org.aissms.cicada.user.User;
-import org.aissms.cicada.user.UserRepository;
+import org.aissms.cicada.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 // registers user and fills empty map for conversation, set for invites
 @RestController
 public class RegisterController {
-    @Autowired UserRepository repository;
+    @Autowired UserService userService;
     @Autowired PasswordEncoder encoder;
     @Autowired JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(RegisterForm form) {
-        User user = repository.findByEmail(form.getEmail());
+        User user = userService.findByEmail(form.getEmail());
         if(user != null) {
             return new ResponseEntity<String>("email already exists", HttpStatus.FORBIDDEN);
         }
@@ -36,7 +36,7 @@ public class RegisterController {
         user.setInviteReceived(new HashSet<String>());
         user.setInviteSent(new HashSet<String>());
 
-        repository.save(user);
+        userService.save(user);
         String token = jwtTokenUtil.generateToken(getUserDetails(form.getEmail(), form.getPassword()));
 
         return new ResponseEntity<String>(token, HttpStatus.OK);

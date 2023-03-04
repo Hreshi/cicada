@@ -8,7 +8,7 @@ import org.aissms.cicada.conversation.ConversationRepository;
 import org.aissms.cicada.messaging.MyMessage;
 import org.aissms.cicada.messaging.MyMessageDto;
 import org.aissms.cicada.user.User;
-import org.aissms.cicada.user.UserRepository;
+import org.aissms.cicada.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +16,11 @@ import org.springframework.stereotype.Service;
 public class MessageBlockService {
     @Autowired ConversationRepository conversationRepository;
     @Autowired MessageBlockRepository blockRepository;
-    @Autowired UserRepository userRepository;
+    @Autowired UserService userService;
 
     public int getBlockCount(String email1, String email2) {
-        User user1 = userRepository.findByEmail(email1);
-        User user2 = userRepository.findByEmail(email2);
+        User user1 = userService.findByEmail(email1);
+        User user2 = userService.findByEmail(email2);
         
         if(user1 == null || user2 == null) return -1;
 
@@ -52,8 +52,8 @@ public class MessageBlockService {
     // get as dto
     public MessageBlockDto getMessageBlockDto(String email1, String email2, int index) {
         if(index <= 0) return null;
-        User user1 = userRepository.findByEmail(email1);
-        User user2 = userRepository.findByEmail(email2);
+        User user1 = userService.findByEmail(email1);
+        User user2 = userService.findByEmail(email2);
         
         if(user1 == null || user2 == null) return null;
 

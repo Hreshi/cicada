@@ -7,22 +7,22 @@ import org.aissms.cicada.block.MessageBlockRepository;
 import org.aissms.cicada.conversation.Conversation;
 import org.aissms.cicada.conversation.ConversationRepository;
 import org.aissms.cicada.user.User;
-import org.aissms.cicada.user.UserRepository;
+import org.aissms.cicada.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MessageService {
-    @Autowired UserRepository userRepository;
+    @Autowired UserService userService;
     @Autowired ConversationRepository conversationRepository;
     @Autowired MessageBlockRepository blockRepository;
     @Autowired SimpMessagingTemplate messagingTemplate;
 
     public MyMessageDto storeMessage(String senderEmail, String receiverEmail, String content) {
-        User receiver = userRepository.findByEmail(receiverEmail);
+        User receiver = userService.findByEmail(receiverEmail);
         if(receiver == null) return null;
-        User sender = userRepository.findByEmail(senderEmail);
+        User sender = userService.findByEmail(senderEmail);
 
         MyMessage message = new MyMessage();
         message.setAuthorId(sender.getId());

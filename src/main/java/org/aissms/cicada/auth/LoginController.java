@@ -2,7 +2,7 @@ package org.aissms.cicada.auth;
 
 import org.aissms.cicada.security.JwtTokenUtil;
 import org.aissms.cicada.user.User;
-import org.aissms.cicada.user.UserRepository;
+import org.aissms.cicada.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +14,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RestController
 public class LoginController {
-    @Autowired UserRepository repository;
+    @Autowired UserService userService;
     @Autowired PasswordEncoder encoder;
     @Autowired JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/login")
     public ResponseEntity<String> authenticateUser(LoginForm form) {
-        User user = repository.findByEmail(form.getEmail());
+        User user = userService.findByEmail(form.getEmail());
         if(user == null || !encoder.matches(form.getPassword(), user.getPassword())) {
             return new ResponseEntity<String>("invalid cred", HttpStatus.FORBIDDEN);
         }
