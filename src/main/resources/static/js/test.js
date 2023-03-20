@@ -28,7 +28,7 @@ function connect() {
 }
 
 function send(user, message) {
-    stmp.send('/ms/send/'+user,{}, message)
+    stmp.send('/ms/send/'+user,{usermail}, message)
 }
 
 function subscribe() {

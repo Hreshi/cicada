@@ -21,6 +21,7 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<String> authenticateUser(LoginForm form) {
         User user = userService.findByEmail(form.getEmail());
+        if(user == null) System.out.println("user is null");
         if(user == null || !encoder.matches(form.getPassword(), user.getPassword())) {
             return new ResponseEntity<String>("invalid cred", HttpStatus.FORBIDDEN);
         }

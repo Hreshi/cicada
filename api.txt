@@ -1,70 +1,131 @@
-Sign in with github:
-	1) Click on link - 'localhost:8080/oauth2/authorization/github'
-		It will redirect to github login and after login it will again redirect to localhost
-	2) After login we can access api and websocket
+// file upload in progress
+Register
+	1) POST /api/register
+		body {
+			email,
+			password,
+			name,
+			avatarUrl
+		}
+		
+		Returns a jwt token.
 
+Login
+	1) POST /api/login 
+		body {
+			email,
+			password
+		}
+		returns jwt
 
 Invite:
-	1) Get all invites
-		request = "localhost:8080/invite/all"
-		response = [{"inviteFrom":"Hreshi","inviteTo":"hrushikeshkale"}]
-
-	2) Send invite
-		request = 'localhost:8080/invite/send/username'
-		method = post
-
-	3) Accept invite
-		request = 'localhost:8080/invite/accept/username'
-		method = post
-
-Friendship:
-	1) Get all friends
-		request = 'localhost:8080/friend/all'
-		response = [{"username":"Hrushikeshkale","friend":"Hreshi"}]
-	2) Delete friend
-		request = 'localhost:8080/friend/delete/username'
-		method = post
-
-Messages:
-	1) Get chat with user
-		request = 'localhost:8080/text/username'
+	1) Get sent invites(invites sent by me)
+		request = GET "/api/invite/sent"
 		response = [
-			{"id":1,"sender":"Hrushikeshkale","recver":"Hreshi","content":"hola"},
-			{"id":2,"sender":"Hrushikeshkale","recver":"Hreshi","content":"hi what doing"},
-			{"id":3,"sender":"Hrushikeshkale","recver":"Hreshi","content":"nothing"},
-			{"id":4,"sender":"Hrushikeshkale","recver":"Hreshi","content":"much"}
+			{
+				email:"hrushi@gmail.com",
+				name:"Hrushikesh Kale",
+				avatarUrl:"http://url"
+			},
+			{
+				email:"mrunal@gmail.com",
+				name:"Mrunal Patil",
+				avatarUrl:"http://url"
+			}
 		]
 
-User data:
-	1) Get self data
-		request = 'localhost:8080/user/data'
+	2) Get received invites(invites sent to me)
+		request = "/api/invite/received"
+		method = GET
+		response = response = [
+			{
+				email:"hrushi@gmail.com",
+				name:"Hrushikesh Kale",
+				avatarUrl:"http://url"
+			},
+			{
+				email:"mrunal@gmail.com",
+				name:"Mrunal Patil",
+				avatarUrl:"http://url"
+			}
+		]
+
+	3) Send invite
+		request = '/api/invite/send/{email of other user}'
+		method = post
+
+	4) Accept invite
+		request = '/api/invite/accept/{email of other user}'
+		method = post
+	
+	5) Delete invite 
+		request = "/api/invite/delte/{email of other user}'
+		method = POST
+
+Conversation:
+	1) Get all conversations
+		request = '/api/conversation/my-conversation'
+		response = [
+			{
+				email:"hrushi@gmail.com",
+				name:"Hrushikesh Kale",
+				avatarUrl:"http://url"
+			},
+			{
+				email:"mrunal@gmail.com",
+				name:"Mrunal Patil",
+				avatarUrl:"http://url"
+			}
+		]
+
+User status
+	1) Get status of user
+		request = "/api/status/email"
+		method = get 
+		response = "ONLINE" or "OFFLINE"
+
+Messages: Messages are stored in blocks of size 25 with 1 based indexing
+
+	1) Get latest block count
+		request = "/api/message/{email of friend}/block-count"
+		response = number of blocks in that conversation
+
+	2) Get a block
+		request = "/api/message/{email of friend}/block/index
 		response = {
-			"username":"Hrushikeshkale",
+			int blockIndex,
+			[
+				{
+					int blockIndex;
+					int messageIndex;
+					String author;
+					String content;
+					Date date;
+				}
+			]
+		}
+
+User data:
+	1) Get user data
+		request = '/api/user/info/{email}'
+		response = {
+			"email":"hrushi@gmail.com",
+			"name":"Hrushikesh Kale",
 			"avatarUrl":"https://avatars.githubusercontent.com/u/60249673?v=4"
 		}
-	2) Get some user's status
-		requset = 'localhost:8080/user/status/username'
-		response = {"username":"Hreshi","status":"online"}
+
 
 For websocket messaging we are using sockjs
 
 Connect:
-	1) Connect to websocket with 'localhost:8080/ws/connect'
-	2) Subscribe to 'localhost:8080/messages/yourusername'
+	1) Connect to websocket with 'localhost:8080/api/ws?token={insert token here}'
+	2) Subscribe to 'localhost:8080/messages/your_email'
 
 Send message:
-	request = "localhost:8080/ms/send"
-	data = let message = {
-                sender:msg.sender,
-                recver:msg.recver,
-                content:msg.content
-            }
+	request = "localhost:8080/ms/send/{email_of_friend}"
+	message = "some data"
     Note * - the spelling is "recver" without i
 
-
-
-hrushi - eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJocnVzaGlAZ21haWwuY29tIiwiaWF0IjoxNjc2MTg5OTkyLCJleHAiOjE2NzYyMDc5OTJ9.Y5G7RcVAnY1HoGbdxdcuXDP8rlSJeAjZyUmUHyF8Jo2OcRIuClCYFZDqmj5lP4rF6sqaOSGasggGYQDlx-d8tg
-ashu   - eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2h1QGdtYWlsLmNvbSIsImlhdCI6MTY3NjE5MDA0MiwiZXhwIjoxNjc2MjA4MDQyfQ.OHXhfOJSgCeYQD-i9oCsPpHsoGMdFL1gl0GBS5N2E4r58jtlVKFwroPNxrq6rS3I6t6yPJhLsTmde6V_joyu3g
 
 
 test websocket
@@ -78,3 +139,53 @@ let stmp = StompJs.Stomp.over(sock);
 3) stmp.activate()
 
 4) stmp.send('/ms/data/user@gmail.com',{},'hello there')
+
+
+
+
+// test file
+let sock = null;
+let stmp = null;
+let path = ''
+let authHeader = ''
+let myEmail = ''
+async function get(url, meth) {
+
+    let res = await fetch(url, {
+        method: meth,
+        headers:{
+            'Authorization': authHeader,
+        },
+    });
+    console.log(await res.text());
+}
+function setEmail(email) {
+    myEmail = email
+}
+function setToken(st) {
+    authHeader = 'Bearer ' + st;
+    path = '/api/ws?token=' + st
+}
+
+//connect to websocket
+function connect() {
+    sock = new SockJS(path);
+    stmp = StompJs.Stomp.over(sock);
+    stmp.activate();
+}
+
+// send(friend_email, "hello what's up")
+function send(user, message) {
+    stmp.send('/ms/send/'+user,{}, message)
+}
+
+// subscribe to channel
+function subscribe() {
+    stmp.subscribe('/messages/'+myEmail, function (message) {
+        if(message.body) {
+            console.log(message.body);
+        } else {
+            console.log(message)
+        }
+    })
+}

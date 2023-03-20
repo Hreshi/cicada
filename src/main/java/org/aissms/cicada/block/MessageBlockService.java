@@ -88,4 +88,19 @@ public class MessageBlockService {
         dto.messageList = messageDtoList;
         return dto;
     }
+    public MyMessageDto getLastMessage(String email1, String email2) {
+        User user1 = userService.findByEmail(email1);
+        User user2 = userService.findByEmail(email2);
+        
+        if(user1 == null || user2 == null) return null;
+
+        String convId = user1.getConversation().get(user2.getId());
+        if(convId == null) return null;
+
+        Conversation conversation = conversationRepository.findById(convId).get();
+        int blockCount = conversation.size();
+        MessageBlockDto dto = getMessageBlockDto(email1, email2, blockCount);
+        List<MyMessageDto> messageList = dto.messageList;
+        return messageList.get(messageList.size()-1);
+    }
 }

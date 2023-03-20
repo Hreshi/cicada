@@ -1,5 +1,6 @@
 package org.aissms.cicada.block;
 
+import org.aissms.cicada.messaging.MyMessageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,4 +34,8 @@ public class MessageBlockController {
         return new ResponseEntity<MessageBlockDto>(block, HttpStatus.OK);
     }
 
+    @GetMapping("/last-message")
+    public ResponseEntity<MyMessageDto> getLastMessage(Authentication auth, @PathVariable("email") String email) {
+        return ResponseEntity.ok(service.getLastMessage(auth.getName(), email));
+    }
 }
