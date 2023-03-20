@@ -80,18 +80,10 @@ public class User {
         this.conversation = conversation == null ? new HashMap<String, String>() : conversation;
     }
 
-    // dto mapping
-    public UserDto mapToUserDto() {
-        UserDto dto = new UserDto();
-        dto.email = this.email;
-        dto.name = this.name;
-        dto.avatarUrl = this.avatarUrl;
-        return dto;
-    }
     public static List<UserDto> mapToUserDto(List<User> userList) {
         List<UserDto> dtoList = new ArrayList<UserDto>();
         for(User user : userList) {
-            dtoList.add(user.mapToUserDto());
+            dtoList.add(new UserDto(user));
         }
         return dtoList;
     }

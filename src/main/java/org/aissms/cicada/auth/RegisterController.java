@@ -2,7 +2,7 @@ package org.aissms.cicada.auth;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import org.aissms.cicada.mongo.MongoFileStorageService;
+import org.aissms.cicada.mongo.FileService;
 import org.aissms.cicada.security.JwtTokenUtil;
 import org.aissms.cicada.user.User;
 import org.aissms.cicada.user.UserService;
@@ -21,7 +21,7 @@ public class RegisterController {
     @Autowired UserService userService;
     @Autowired PasswordEncoder encoder;
     @Autowired JwtTokenUtil jwtTokenUtil;
-    @Autowired MongoFileStorageService mongoFileStorageService;
+    @Autowired FileService fileService;
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(RegisterForm form) {
@@ -29,7 +29,7 @@ public class RegisterController {
         if(user != null) {
             return new ResponseEntity<String>("email already exists", HttpStatus.FORBIDDEN);
         }
-        String fileName = mongoFileStorageService.storeFile(form.getAvatar());
+        String fileName = fileService.storeFile(form.getAvatar());
         user = mapToUser(form, fileName);
         user.setPassword(encoder.encode(user.getPassword()));
         

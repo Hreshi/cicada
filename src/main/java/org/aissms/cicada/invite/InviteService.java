@@ -64,6 +64,6 @@ public class InviteService {
             return null;
         }
         conversationService.createNewConversation(thatUser, myself);
-        return thatUser.mapToUserDto();
+        return new UserDto(thatUser);
     }
 }

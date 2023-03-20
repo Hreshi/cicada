@@ -12,7 +12,7 @@ public class UserService {
     public UserDto getUserByEmail(String email) {
         User user = userRepository.findByEmail(email);
         if(user == null) return null;
-        return user.mapToUserDto();
+        return new UserDto(user);
     }
     public User findByEmail(String email) {
         User user = userRepository.findByEmail(email);
