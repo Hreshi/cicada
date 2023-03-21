@@ -15,6 +15,7 @@ async function get(url, meth) {
 }
 function setEmail(email) {
     myEmail = email
+    document.getElementById("title").innerText = email
 }
 function setToken(st) {
     authHeader = 'Bearer ' + st;
@@ -28,7 +29,7 @@ function connect() {
 }
 
 function send(user, message) {
-    stmp.send('/ms/send/'+user,{usermail}, message)
+    stmp.send('/ms/send/'+user,{}, message)
 }
 
 function subscribe() {
@@ -39,4 +40,45 @@ function subscribe() {
             console.log(message)
         }
     })
+}
+async function login(email, pass) {
+    let res = await fetch("/api/login", {
+        method: 'post',
+        body: JSON.stringify(
+            {
+                email: email,
+                password: pass,
+            }),
+
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    });
+    if(res.ok) {
+        setToken(await res.text())
+        setEmail(email)
+        connect()
+    } else {
+        console.log("failed")
+    }
+}
+function listConversation() {
+    get("/api/conversation/my-conversation", "get")
+}
+
+function sendInvite(email) {
+    get("/api/invite/send/"+email, "post")
+}
+
+function acceptInvite(email) {
+    get("/api/invite/accept/"+email, "post")
+}
+function deleteInvite(email) {
+    get("/api/invite/delete/"+email, "post")
+}
+function sentInvites() {
+    get("/api/invite/sent/", "get")
+}
+function receivedInvites() {
+    get("/api/invite/received/", "get")
 }
