@@ -17,6 +17,7 @@ class CallRepository {
         return callMap.get(email);
     }
     public void remove(Call call) {
+        if(call == null) return;
         callMap.remove(call.getEmail1());
         callMap.remove(call.getEmail2());
     }

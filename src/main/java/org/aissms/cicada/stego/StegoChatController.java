@@ -2,6 +2,7 @@ package org.aissms.cicada.stego;
 
 import org.aissms.cicada.status.Status;
 import org.aissms.cicada.status.StatusService;
+import org.aissms.cicada.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,5 +39,18 @@ public class StegoChatController {
     @PostMapping("/request/reject")
     public void rejectChatRequest(Authentication auth) {
         stegoChatService.rejectCall(auth.getName());
+    }
+    @PostMapping("/request/accept")
+    public ResponseEntity<UserDto> acceptCallRequest(Authentication auth) {
+        UserDto userDto = stegoChatService.acceptCall(auth.getName());
+        if(userDto == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(userDto);
+    }
+    @PostMapping("/call/end")
+    public ResponseEntity<String> endCall(Authentication auth) {
+        stegoChatService.endCall(auth.getName());
+        return ResponseEntity.ok().build();
     }
 }

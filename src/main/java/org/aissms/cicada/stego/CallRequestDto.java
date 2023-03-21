@@ -3,7 +3,7 @@ package org.aissms.cicada.stego;
 import org.aissms.cicada.user.UserDto;
 
 public class CallRequestDto {
-    static String MESSAGE_TYPE = "CHAT_REQUEST";
+    static String MESSAGE_TYPE = "CALL_REQUEST";
     long ringEndTime;
     UserDto userDto;
 

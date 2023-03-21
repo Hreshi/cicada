@@ -11,7 +11,9 @@ async function get(url, meth) {
             'Authorization': authHeader,
         },
     });
-    console.log(await res.text());
+    let k = await res.text();
+    console.log(k);
+    return k;
 }
 function setEmail(email) {
     myEmail = email
@@ -81,4 +83,16 @@ function sentInvites() {
 }
 function receivedInvites() {
     get("/api/invite/received/", "get")
+}
+function call(email) {
+    let ringEndTime = get("/api/stego/request/"+email, 'get');
+}
+function reject() {
+    get("/api/stego/request/reject", 'post')
+}
+function accept() {
+    get("/api/stego/request/accept", 'post')
+}
+function endCall() {
+    get("/api/stego/call/end", "post")
 }
