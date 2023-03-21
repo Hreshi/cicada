@@ -1,6 +1,7 @@
 package org.aissms.cicada.ws;
 
 import org.aissms.cicada.status.StatusService;
+import org.aissms.cicada.stego.StegoChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 public class CustomWebSocketEventListener{
 
     @Autowired StatusService statusService;
+    @Autowired StegoChatService stegoChatService;
 
     @EventListener
     public void connectedEvent(SessionConnectedEvent event) {
@@ -22,5 +24,6 @@ public class CustomWebSocketEventListener{
     public void disconnectedEvent(SessionDisconnectEvent event) {
         String email = event.getUser().getName();
         statusService.removeStatus(email);
+        stegoChatService.endCall(email);
     }
 }
