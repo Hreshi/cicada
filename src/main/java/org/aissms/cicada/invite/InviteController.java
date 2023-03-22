@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 // for now service code is in controller 
 // move to service layer later
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/invite")
 public class InviteController {
     @Autowired InviteService service;

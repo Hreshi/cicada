@@ -8,8 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Controller
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CallMessageController {
     
     @Autowired SimpMessagingTemplate messagingTemplate;

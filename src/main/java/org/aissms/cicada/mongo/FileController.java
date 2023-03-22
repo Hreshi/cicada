@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 // REQUEST_PATH = mapping of file controller 
 // if not set files won't be served
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/files")
 public class FileController {
     

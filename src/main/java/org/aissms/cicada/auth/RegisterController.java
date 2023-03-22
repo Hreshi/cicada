@@ -13,12 +13,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
 // registers user and fills empty map for conversation, set for invites
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class RegisterController {
     @Autowired UserService userService;
     @Autowired PasswordEncoder encoder;
@@ -26,7 +27,7 @@ public class RegisterController {
     @Autowired FileService fileService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(RegisterForm form) {
+    public ResponseEntity<String> registerUser(@RequestBody RegisterForm form) {
         User user = userService.findByEmail(form.getEmail());
         if(user != null) {
             return new ResponseEntity<String>("email already exists", HttpStatus.FORBIDDEN);

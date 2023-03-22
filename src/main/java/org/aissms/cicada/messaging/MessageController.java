@@ -6,9 +6,11 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class MessageController {
     @Autowired MessageService messageService;
 

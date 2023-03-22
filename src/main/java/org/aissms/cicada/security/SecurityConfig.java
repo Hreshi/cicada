@@ -26,10 +26,6 @@ public class SecurityConfig {
 			.anyRequest()
 			.authenticated();
 		})
-		.csrf(cs -> {
-			cs
-			.disable();
-		})
 		.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
 		.sessionManagement(session -> {
 			session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
