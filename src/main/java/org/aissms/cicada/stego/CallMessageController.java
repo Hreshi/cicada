@@ -6,10 +6,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Controller
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CallMessageController {
     
     @Autowired SimpMessagingTemplate messagingTemplate;
