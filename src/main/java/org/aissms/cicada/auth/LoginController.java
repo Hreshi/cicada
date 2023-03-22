@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class LoginController {
     @Autowired UserService userService;
