@@ -5,12 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/message/{email}")
 public class MessageBlockController {
     @Autowired MessageBlockService service;
@@ -36,6 +38,10 @@ public class MessageBlockController {
 
     @GetMapping("/last-message")
     public ResponseEntity<MyMessageDto> getLastMessage(Authentication auth, @PathVariable("email") String email) {
-        return ResponseEntity.ok(service.getLastMessage(auth.getName(), email));
+        MyMessageDto dto = service.getLastMessage(auth.getName(), email);
+        if(dto == null) {
+            return ResponseEntity.ok().build();
+        }
+        return new ResponseEntity<MyMessageDto>(dto, HttpStatus.OK);
     }
 }

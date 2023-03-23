@@ -101,6 +101,7 @@ public class MessageBlockService {
         int blockCount = conversation.size();
         MessageBlockDto dto = getMessageBlockDto(email1, email2, blockCount);
         List<MyMessageDto> messageList = dto.messageList;
+        if(messageList.isEmpty()) return null;
         return messageList.get(messageList.size()-1);
     }
 }
