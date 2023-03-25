@@ -28,6 +28,7 @@ public class FrameInterceptor implements ChannelInterceptor {
             if(!destination.equalsIgnoreCase(accessor.getDestination())) {
                 return null;
             }
+            System.out.println(accessor.getDestination());
         }
         return message;
     }

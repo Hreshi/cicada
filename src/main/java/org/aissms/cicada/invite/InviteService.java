@@ -51,7 +51,10 @@ public class InviteService {
         User myself = userService.findByEmail(auth.getName());
         myself.getInviteReceived().remove(thatUser.getId());
         myself.getInviteSent().remove(thatUser.getId());
+        thatUser.getInviteReceived().remove(myself.getId());
+        thatUser.getInviteSent().remove(myself.getId());
         userService.save(myself);
+        userService.save(thatUser);
         return true;
     }
     public UserDto acceptInvite(Authentication auth, String email) {
