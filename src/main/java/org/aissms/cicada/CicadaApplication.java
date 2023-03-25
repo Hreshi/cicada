@@ -2,6 +2,7 @@ package org.aissms.cicada;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,5 +18,9 @@ public class CicadaApplication {
 	@GetMapping("/page")
 	public String getPage() {
 		return "home";
+	}
+	@GetMapping("/ping")
+	public ResponseEntity<String> isAuthorized() {
+		return ResponseEntity.ok("");
 	}
 }

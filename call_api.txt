@@ -19,35 +19,7 @@ function send(message) {
 // subscribe to channel
 // have to subsribe to /messages/myEmail not any other channel
 // let data = message.body
-// data has various types
-	1) MESSAGE - simple chat between two users
-		res = 	{
-					String MESSAGE_TYPE = MESSAGE;
-					int blockIndex;
-					int messageIndex;
-					String author;
-					String content;
-					Date date;
-				}
-	2) CALL_REQUEST - request for a secure chat
-		res = {
-			MESSAGE_TYPE = "CALL_REQUEST";
-    		long ringEndTime;
-		}
 
-	3) CALL_REQUEST_ACCEPT - when a user2 accepts request server sends a message to user1
-		As you say i am removing adding user2 info from response
-		res {
-			MESSAGE_TYPE = "CALL_REQUEST_ACCEPT",
-		}
-	4) CALL_REQUEST_REJECT - when user2 rejects call server sends this message to user1
-		res = {
-			MESSAGE_TYPE = "CALL_REQUEST_REJECT"
-		}
-	5) END_OF_CALL - if user1 ends call then this message is sent to user2
-		res = {
-			MESSAGE_TYPE = "END_OF_CALL"
-		}
 function subscribe() {
     stmp.subscribe('/messages/'+myEmail, function (message) {
         if(message.body) {
@@ -60,12 +32,67 @@ function subscribe() {
 }
 
 
-// setup backend for testing
-1) Install java
-2) command to run backend - 
-windows - mvnw spring-boot:run
-ubuntu - ./mvnw spring-boot:run
+// call api
 
-3) for database
-	1) user = your_name_in_lowercase
-	2) pass = will send you
+1) Alice makes call request to bob
+	url = 'http://localhost:8080/api/stego/request/bobmail',
+	method = get
+	res = ring end time or 403 status if offline or busy
+	ui - show calling to bob till ring end time
+
+	after alice makes request to bob, bob will receive a websocket message,
+	message = {
+		MESSAGE_TYPE = 'CALL_REQUEST',
+		ringEndTime = long,
+		userDto = {
+			email,
+			name,
+			avatarUrl
+		}
+	}
+
+2) Bob accepts request
+	url = 'http://localhost:8080/api/stego/request/accept',
+	method = post
+	Info about alice
+	res = {
+		email,
+		name,
+		avatarUrl
+	}
+
+	Alice get a websocket message
+	message = {
+		MESSAGE_TYPE = 'CALL_REQUEST_ACCEPT',
+		acceptedBy = {
+			email,
+			name,
+			avatarUrl
+		}
+	}
+3) Bob rejects request
+	url = 'http://localhost:8080/api/stego/request/accept',
+	method = post
+	Info about alice
+	res = {
+		email,
+		name,
+		avatarUrl
+	}
+	Alice get a websocket message
+	message = {
+		MESSAGE_TYPE = 'CALL_REQUEST_REJECT',
+		rejectedBy = {
+			email,
+			name,
+			avatarUrl
+		}
+	}
+3) Bob ends call
+	url = 'http://localhost:8080/api/stego/call/end',
+	method = post
+
+	Alice get a websocket message
+	message = {
+		MESSAGE_TYPE = 'END_OF_CALL',
+	}
