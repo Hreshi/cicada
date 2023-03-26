@@ -27,7 +27,7 @@ public class StegoChatController {
     // if email2 is online and available returns ring end time
     // ring end time is when email2 is stopped ringing
     // ringEndTime is in milliseconds
-    @GetMapping("/request/{email2}")
+    @GetMapping("/request/call/{email2}")
     public ResponseEntity<String> sendChatRequest(Authentication auth, @PathVariable("email2") String email2) {
         if(Status.OFFLINE.equals(statusService.getStatus(auth, email2))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User is offline");

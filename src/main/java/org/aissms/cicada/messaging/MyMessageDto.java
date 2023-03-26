@@ -3,7 +3,7 @@ package org.aissms.cicada.messaging;
 import java.util.Date;
 
 public class MyMessageDto {
-    static String messageType = "MESSAGE";
+    String messagetype = "MESSAGE";
     private int blockIndex;
     private int messageIndex;
     private String author;
@@ -40,7 +40,7 @@ public class MyMessageDto {
     public void setDate(Date date) {
         this.date = date;
     }
-    public String getMessageType() {
-        return messageType;
+    public String getMessagetype() {
+        return messagetype;
     }
 }

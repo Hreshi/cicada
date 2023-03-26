@@ -74,5 +74,6 @@ public class StegoChatService {
         }
         callRepository.remove(call);
         messagingTemplate.convertAndSend("/messages/"+secondUser, new EndOfCallDto());
+        messagingTemplate.convertAndSend("/messages/"+email, new EndOfCallDto());
     }
 }
