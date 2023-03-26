@@ -1,5 +1,8 @@
 package org.aissms.cicada.stego;
 
+import java.util.Date;
+
+import org.aissms.cicada.messaging.MyMessageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -24,6 +27,12 @@ public class CallMessageController {
         if(secondUser.equals(auth.getName())) {
             secondUser = call.getEmail2();
         }
-        messagingTemplate.convertAndSend("/messages/"+secondUser, message);
+        MyMessageDto dto = new MyMessageDto();
+        dto.setAuthor(auth.getName());
+        dto.setBlockIndex(0);
+        dto.setContent(message);
+        dto.setMessagetype("SECRET");
+        dto.setDate(new Date());
+        messagingTemplate.convertAndSend("/messages/"+secondUser, dto);
     }
 }

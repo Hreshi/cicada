@@ -43,4 +43,7 @@ public class MyMessageDto {
     public String getMessagetype() {
         return messagetype;
     }
+    public void setMessagetype(String messagetype) {
+        this.messagetype = messagetype;
+    }
 }
