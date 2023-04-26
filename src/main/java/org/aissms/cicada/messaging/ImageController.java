@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +24,7 @@ public class ImageController {
     @Autowired ConversationService conversationService;
 
     @PostMapping("/send/{email}")
-    public void sendImage(@PathVariable("email") String email2, MultipartFile image, Authentication auth) {
+    public void sendImage(@PathVariable("email") String email2, @RequestParam("image") MultipartFile image, Authentication auth) {
         Conversation conv = conversationService.getConversationWith(auth.getName(), email2);
         // invalid request
         if(conv == null) {
