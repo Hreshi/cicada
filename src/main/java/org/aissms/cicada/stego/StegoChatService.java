@@ -1,5 +1,6 @@
 package org.aissms.cicada.stego;
 
+import org.aissms.cicada.mongo.FileService;
 import org.aissms.cicada.user.UserDto;
 import org.aissms.cicada.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,13 +9,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class StegoChatService {
-    static Integer RING_SPAN_SECONDS = 20;
+    static Integer RING_SPAN_SECONDS = 30;
 
     @Autowired
     CallRepository callRepository;
     @Autowired
     SimpMessagingTemplate messagingTemplate;
     @Autowired UserService userService;
+
+    @Autowired FileService fileService;
 
     public boolean busy(String email) {
         Call call = callRepository.getCall(email);
@@ -72,6 +75,8 @@ public class StegoChatService {
         if(secondUser.equals(email)) {
             secondUser = call.getEmail2();
         }
+        fileService.deleteFile(call.getImageLinkFromEmail1());
+        fileService.deleteFile(call.getImageLinkFromEmail2());
         callRepository.remove(call);
         messagingTemplate.convertAndSend("/messages/"+secondUser, new EndOfCallDto());
         messagingTemplate.convertAndSend("/messages/"+email, new EndOfCallDto());
