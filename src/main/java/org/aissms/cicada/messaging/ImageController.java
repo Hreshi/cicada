@@ -3,6 +3,7 @@ package org.aissms.cicada.messaging;
 import org.aissms.cicada.conversation.Conversation;
 import org.aissms.cicada.conversation.ConversationService;
 import org.aissms.cicada.mongo.FileService;
+import org.aissms.cicada.mongo.FileController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;

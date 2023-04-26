@@ -7,6 +7,7 @@ import org.aissms.cicada.block.MessageBlockRepository;
 import org.aissms.cicada.conversation.Conversation;
 import org.aissms.cicada.conversation.ConversationRepository;
 import org.aissms.cicada.user.User;
+import org.aissms.cicada.mongo.FileController;
 import org.aissms.cicada.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -57,7 +58,9 @@ public class MessageService {
         dto.setContent(content);
         dto.setDate(message.getTime());
         dto.setBlockIndex(blockIndex);
-        dto.setImageLink(imageLink);
+        if(imageLink != null) {
+            dto.setImageLink(FileController.REQUEST_PATH + imageLink);
+        }
         dto.setMessageIndex(messageIndex);
 
         return dto;
