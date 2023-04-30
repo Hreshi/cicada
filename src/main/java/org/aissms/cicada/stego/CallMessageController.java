@@ -19,6 +19,7 @@ public class CallMessageController {
 
     @MessageMapping("/secure")
     public void sendMessage(@Payload String message, Authentication auth) {
+        System.out.println(message);
         Call call = callRepository.getCall(auth.getName());
         if(call == null) return;
 
