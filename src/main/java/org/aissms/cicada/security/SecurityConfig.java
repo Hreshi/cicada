@@ -10,12 +10,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 
 // don't create an AuthenticationManager bean
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 	@Autowired JwtRequestFilter jwtRequestFilter;
+	@Autowired CustomCorsFilter corsFilter;
 	
 	@Bean
 	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
@@ -30,6 +32,7 @@ public class SecurityConfig {
 			cs.disable();
 		})
 		.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+		.addFilterBefore(corsFilter, CorsFilter.class)
 		.sessionManagement(session -> {
 			session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		})

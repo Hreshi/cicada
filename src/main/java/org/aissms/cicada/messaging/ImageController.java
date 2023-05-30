@@ -3,10 +3,8 @@ package org.aissms.cicada.messaging;
 import org.aissms.cicada.conversation.Conversation;
 import org.aissms.cicada.conversation.ConversationService;
 import org.aissms.cicada.mongo.FileService;
-import org.aissms.cicada.mongo.FileController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 // send file with part name as "image"
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/image")
 public class ImageController {
     @Autowired MessageService messageService;
